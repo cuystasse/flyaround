@@ -4,7 +4,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "AppBundle\\": "src/AppBundle"
+            "WCS\\CoavBundle\\": "src/WCS/CoavBundle"
         },
         "classmap": [
             "app/AppKernel.php",
