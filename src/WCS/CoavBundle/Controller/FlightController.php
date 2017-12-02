@@ -45,6 +45,13 @@ class FlightController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $flight->setNbFreeSeats($flight->getPlane()->getPlaneNbSeats());
+
+            $flight->setPublicationDate(new \DateTime());
+
+            $flight->setWasDone(false);
+
             $em->persist($flight);
             $em->flush();
 

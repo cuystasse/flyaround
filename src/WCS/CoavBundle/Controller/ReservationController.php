@@ -45,7 +45,20 @@ class ReservationController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $nbSeats = count($reservation->getPassengers());
+            $reservation->setNbReservedSeats($nbSeats);
+
+            // todo : gérer le fait qu'un vol n'a plus le nb de sièges requis via un assert
+
+            $reservation->setPublicationDate(new \DateTime());
+
+            $reservation->setWasDone(false);
+
             $em->persist($reservation);
+            $em->flush();
+
+            $reservation->getFlight()->checkSeats();
             $em->flush();
 
             return $this->redirectToRoute('reservation_show', array('id' => $reservation->getId()));
@@ -86,6 +99,17 @@ class ReservationController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+            $nbSeats = count($reservation->getPassengers());
+            $reservation->setNbReservedSeats($nbSeats);
+
+            // todo : gérer le fait qu'un vol n'a plus le nb de sièges requis via un assert
+
+            $reservation->setWasDone(false);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $reservation->getFlight()->checkSeats();
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('reservation_edit', array('id' => $reservation->getId()));
@@ -111,7 +135,11 @@ class ReservationController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
             $em->remove($reservation);
+            $em->flush();
+
+            $reservation->getFlight()->checkSeats();
             $em->flush();
         }
 

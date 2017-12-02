@@ -2,9 +2,14 @@
 
 namespace WCS\CoavBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use WCS\CoavBundle\Entity\PlaneModel;
+use WCS\CoavBundle\Entity\User;
 
 class FlightType extends AbstractType
 {
@@ -13,7 +18,31 @@ class FlightType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('departure')->add('arrival')->add('nbFreeSeats')->add('seatPrice')->add('takeOffTime')->add('publicationDate')->add('description')->add('pilot')->add('plane')->add('wasDone');
+        $builder
+            ->add('departure')
+            ->add('arrival')
+            ->add('seatPrice')
+            ->add('takeOffTime', DateType::class, [
+                'widget' => 'choice',
+                'years' => range(date('Y'), date('Y') +1 ),
+            ])
+            ->add('description')
+            ->add('pilot', EntityType::class, [
+                'class' => User::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.isACertifiedPilot = True')
+                        ->andWhere('u.isActive = True');
+                }
+            ])
+            ->add('plane', EntityType::class, [
+                'class' => PlaneModel::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('pm')
+                        ->orderBy('pm.model', 'ASC')
+                        ->where('pm.isAvailable = True');
+                }
+            ]);
     }
     
     /**
