@@ -39,13 +39,6 @@ class Flight
     private $arrival;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="nbFreeSeats", type="smallint")
-     */
-    private $nbFreeSeats;
-
-    /**
      * @var float
      *
      * @ORM\Column(name="seatPrice", type="float")
@@ -78,7 +71,8 @@ class Flight
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="WCS\CoavBundle\Entity\User", inversedBy="flights")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $pilot;
 
@@ -161,27 +155,18 @@ class Flight
     }
 
     /**
-     * Set nbFreeSeats
-     *
-     * @param integer $nbFreeSeats
-     *
-     * @return Flight
-     */
-    public function setNbFreeSeats($nbFreeSeats)
-    {
-        $this->nbFreeSeats = $nbFreeSeats;
-
-        return $this;
-    }
-
-    /**
      * Get nbFreeSeats
      *
      * @return int
      */
     public function getNbFreeSeats()
     {
-        return $this->nbFreeSeats;
+        $freeSeats = $this->getPlane()->getPlaneNbSeats();
+        $reservations = $this->getReservations();
+        foreach ($reservations as $reservation) {
+            $freeSeats -= $reservation->getNbReservedSeats();
+        }
+        return $freeSeats;
     }
 
     /**
@@ -401,16 +386,4 @@ class Flight
         return $this->reservations;
     }
 
-    /**
-     * Check reservations to update nb of free seats on flight
-     */
-    public function checkSeats()
-    {
-        $freeSeats = $this->getPlane()->getPlaneNbSeats();
-        $reservations = $this->getReservations();
-        foreach ($reservations as $reservation) {
-            $freeSeats -= $reservation->getNbReservedSeats();
-        }
-        $this->setNbFreeSeats($freeSeats);
-    }
 }

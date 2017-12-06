@@ -58,9 +58,6 @@ class ReservationController extends Controller
             $em->persist($reservation);
             $em->flush();
 
-            $reservation->getFlight()->checkSeats();
-            $em->flush();
-
             return $this->redirectToRoute('reservation_show', array('id' => $reservation->getId()));
         }
 
@@ -109,9 +106,6 @@ class ReservationController extends Controller
 
             $this->getDoctrine()->getManager()->flush();
 
-            $reservation->getFlight()->checkSeats();
-            $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('reservation_edit', array('id' => $reservation->getId()));
         }
 
@@ -137,9 +131,6 @@ class ReservationController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $em->remove($reservation);
-            $em->flush();
-
-            $reservation->getFlight()->checkSeats();
             $em->flush();
         }
 

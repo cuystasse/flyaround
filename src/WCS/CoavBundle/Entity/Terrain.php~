@@ -293,12 +293,14 @@ class Terrain
     {
         return 'Terrain : ' . $this->getName() . ' ' . $this->city;
     }
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->departures = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrivals = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

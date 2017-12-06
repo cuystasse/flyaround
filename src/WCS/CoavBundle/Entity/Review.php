@@ -3,6 +3,7 @@
 namespace WCS\CoavBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Review
@@ -39,6 +40,13 @@ class Review
      * @var int
      *
      * @ORM\Column(name="note", type="smallint")
+     *
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 5,
+     *      minMessage = "Your note's review must be {{ limit }} or greater",
+     *      maxMessage = "Your note's review must be {{ limit }} or lower"
+     * )
      */
     private $note;
 

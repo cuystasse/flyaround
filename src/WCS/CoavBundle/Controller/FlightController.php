@@ -5,7 +5,8 @@ namespace WCS\CoavBundle\Controller;
 use WCS\CoavBundle\Entity\Flight;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Flight controller.
@@ -45,8 +46,6 @@ class FlightController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            $flight->setNbFreeSeats($flight->getPlane()->getPlaneNbSeats());
 
             $flight->setPublicationDate(new \DateTime());
 

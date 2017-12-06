@@ -112,6 +112,11 @@ class User
     private $reservations;
 
     /**
+     * @ORM\OneToMany(targetEntity="WCS\CoavBundle\Entity\Flight", mappedBy="pilot")
+     */
+    private $flights;
+
+    /**
      * Get id
      *
      * @return int
@@ -477,5 +482,39 @@ class User
     public function __toString()
     {
         return $this->getUserName();
+    }
+
+    /**
+     * Add flight
+     *
+     * @param \WCS\CoavBundle\Entity\Flight $flight
+     *
+     * @return User
+     */
+    public function addFlight(\WCS\CoavBundle\Entity\Flight $flight)
+    {
+        $this->flights[] = $flight;
+
+        return $this;
+    }
+
+    /**
+     * Remove flight
+     *
+     * @param \WCS\CoavBundle\Entity\Flight $flight
+     */
+    public function removeFlight(\WCS\CoavBundle\Entity\Flight $flight)
+    {
+        $this->flights->removeElement($flight);
+    }
+
+    /**
+     * Get flights
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFlights()
+    {
+        return $this->flights;
     }
 }

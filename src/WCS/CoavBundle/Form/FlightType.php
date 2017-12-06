@@ -24,7 +24,7 @@ class FlightType extends AbstractType
             ->add('seatPrice')
             ->add('takeOffTime', DateType::class, [
                 'widget' => 'choice',
-                'years' => range(date('Y'), date('Y') +1 ),
+                'years' => range(date('Y'), date('Y') + 5 ),
             ])
             ->add('description')
             ->add('pilot', EntityType::class, [
@@ -37,6 +37,7 @@ class FlightType extends AbstractType
             ])
             ->add('plane', EntityType::class, [
                 'class' => PlaneModel::class,
+                'choice_label' => 'model',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('pm')
                         ->orderBy('pm.model', 'ASC')

@@ -44,6 +44,12 @@
                         <li>
                             <a href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
                         </li>
+                        <li>
+                            <a href="{{ path('reservation_new', { 'id': user.id }) }}">Make a reservation</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('review_new', { 'id': user.id }) }}">Add a review</a>
+                        </li>
                     </ul>
                 </td>
             </tr>
